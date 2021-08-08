@@ -1,6 +1,11 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "./actions/user";
+/* 비동기 요청은 actions로 불러옴 */
+import { login } from "./actions/user";
+import { addPost } from "./actions/post";
+
+/* 동기 요청은 reducer로 불러옴 */
+const userSlice = require("./reducers/userSlice");
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -16,7 +21,11 @@ const App = () => {
   }, []);
 
   const logoutHandler = useCallback(() => {
-    dispatch(logout());
+    dispatch(userSlice.actions.logout());
+  }, []);
+
+  const addPostHandler = useCallback(() => {
+    dispatch(addPost());
   }, []);
 
   return (
@@ -24,6 +33,7 @@ const App = () => {
       {user.isLogin ? (
         <div>
           {user.data.name}님<button onClick={logoutHandler}>로그아웃</button>
+          <button onClick={addPostHandler}>게시글 작성</button>
         </div>
       ) : (
         <>
